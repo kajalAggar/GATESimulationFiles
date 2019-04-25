@@ -1,0 +1,110 @@
+# GATE simulation file
+# Presenting the geometry for Scanner D or JackPET
+
+
+#  	CYLINDRICAL 
+/gate/world/daughters/name 			cylindricalPET
+/gate/world/daughters/insert 			cylinder
+/gate/cylindricalPET/placement/setTranslation 	0.0 0.0 0.0 mm
+/gate/cylindricalPET/geometry/setRmax 		100.0 mm 
+/gate/cylindricalPET/geometry/setRmin 		20.0 mm 
+/gate/cylindricalPET/geometry/setHeight 	110.0 mm
+/gate/cylindricalPET/setMaterial 		Air
+/gate/cylindricalPET/vis/forceWireframe
+/gate/cylindricalPET/vis/setColor 		white
+
+# ------ P L E X I G L A S S 	C A S K-----------
+/gate/cylindricalPET/daughters/name         headSyst
+/gate/cylindricalPET/daughters/insert	    box
+/gate/headSyst/placement/setTranslation     0.0 0.0 0.0 mm
+/gate/headSyst/geometry/setXLength	    89.0 mm
+/gate/headSyst/geometry/setYLength	    89.0 mm
+/gate/headSyst/geometry/setZLength	    104.0 mm
+/gate/headSyst/setMaterial		    Plexiglass
+/gate/headSyst/vis/forceWireframe
+/gate/headSyst/vis/setVisible  		    0
+/gate/headSyst/vis/setColor    		    red
+
+# ------ A I R 	 G A P --------------------------
+/gate/cylindricalPET/daughters/name         module
+/gate/cylindricalPET/daughters/insert       box
+/gate/module/geometry/setXLength	    50.4 mm 
+/gate/module/geometry/setYLength	    50.4 mm
+/gate/module/geometry/setZLength	    104.0 mm
+/gate/module/placement/setTranslation       0.0 0.0 0.0 mm
+/gate/module/setMaterial                    Air
+/gate/module/vis/forceWireframe
+/gate/module/vis/setVisible 		    0
+/gate/module/vis/setColor    		    blue
+
+# ----- R S E C T O R ----- #
+/gate/cylindricalPET/daughters/name         rsector
+/gate/cylindricalPET/daughters/insert       box
+/gate/rsector/geometry/setXLength           8.32 mm
+/gate/rsector/geometry/setYLength           50.14 mm
+/gate/rsector/geometry/setZLength           104.0 mm
+/gate/rsector/setMaterial                   Air
+/gate/rsector/placement/setTranslation      29.21 0.0 0.0 mm
+/gate/rsector/vis/forceWireframe
+/gate/rsector/vis/setVisible 		    0
+/gate/rsector/vis/setColor    	            red
+
+# ----- A L U M I N I U M	 C O A T I N G ----- #
+/gate/rsector/daughters/name               alu
+/gate/rsector/daughters/insert             box
+/gate/alu/placement/setTranslation         -4.06 0.0 0.0 mm
+/gate/alu/geometry/setXLength	    	   0.2 mm
+/gate/alu/geometry/setYLength	    	   50.14 mm
+/gate/alu/geometry/setZLength	    	   104.0 mm
+/gate/alu/setMaterial                      Aluminium
+/gate/alu/vis/forceWireframe
+/gate/alu/vis/setVisible 		   0
+/gate/alu/vis/setColor    		   green
+
+
+# ----- C R Y S T A L ----- #
+/gate/rsector/daughters/name                crystal
+/gate/rsector/daughters/insert              box
+/gate/crystal/geometry/setXLength           8.12 mm
+/gate/crystal/geometry/setYLength           50.14 mm
+/gate/crystal/geometry/setZLength           50.14 mm
+/gate/crystal/placement/setTranslation      0.1 0.0 0.0 mm
+/gate/crystal/setMaterial                   Air
+/gate/crystal/vis/forceWireframe
+/gate/crystal/vis/setVisible 1
+
+# ----- L Y S O	 L A Y E R ----- #
+/gate/crystal/daughters/name                LYSO
+/gate/crystal/daughters/insert              box
+/gate/LYSO/geometry/setXLength              8.12 mm
+/gate/LYSO/geometry/setYLength              50.14 mm
+/gate/LYSO/geometry/setZLength              50.14 mm
+/gate/LYSO/placement/setTranslation         0.0 0.0 0.0 mm
+/gate/LYSO/setMaterial                      LYSOPET
+/gate/LYSO/vis/forceSolid
+/gate/LYSO/vis/setVisible 1
+/gate/LYSO/vis/setColor    		    blue
+
+#	R E P E A T    C R Y S T A L
+/gate/crystal/repeaters/insert 			cubicArray
+/gate/crystal/cubicArray/setRepeatNumberX 	1
+/gate/crystal/cubicArray/setRepeatNumberY 	1
+/gate/crystal/cubicArray/setRepeatNumberZ 	2
+/gate/crystal/cubicArray/setRepeatVector 	0.0 0.0 52.0 mm
+
+# ----- position ----- #
+/gate/rsector/repeaters/insert             ring
+/gate/rsector/ring/setRepeatNumber         4
+
+
+# ----- Attach System ----- #
+/gate/systems/cylindricalPET/rsector/attach    	rsector
+/gate/systems/cylindricalPET/module/attach      crystal
+/gate/systems/cylindricalPET/crystal/attach     LYSO
+
+
+
+# ----- Attach Crystals ----- #
+/gate/LYSO/attachCrystalSD
+/gate/systems/cylindricalPET/describe
+
