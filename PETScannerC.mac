@@ -1,0 +1,105 @@
+# GATE simulation file
+# File is designed for axially oriented crystals
+# Geometry for Axial Scanner or Scanner C
+
+#	CYLINDRICAL
+/gate/world/daughters/name 			cylindricalPET
+/gate/world/daughters/insert 			cylinder
+/gate/cylindricalPET/placement/setTranslation   0.0 0.0 0.0 mm
+/gate/cylindricalPET/geometry/setRmax 		80.0 mm
+/gate/cylindricalPET/geometry/setRmin 		20.0 mm
+/gate/cylindricalPET/geometry/setHeight 	120.0 mm
+/gate/cylindricalPET/setMaterial 		Air
+/gate/cylindricalPET/vis/forceWireframe
+/gate/cylindricalPET/vis/setColor 		white
+
+#	RSECTOR
+/gate/cylindricalPET/daughters/name 		rsector
+/gate/cylindricalPET/daughters/insert 		box
+/gate/rsector/placement/setTranslation 		51.2 0.0 0.0 mm    #radii = 33.2 (51.2 - (39.0/2.0) + 1.5)
+/gate/rsector/geometry/setXLength  		39.0 mm
+/gate/rsector/geometry/setYLength 		26.0 mm
+/gate/rsector/geometry/setZLength 		116.0 mm
+/gate/rsector/setMaterial 			Air
+/gate/rsector/vis/setVisible 			0
+/gate/rsector/vis/setColor 			red
+
+#	MODULE
+/gate/rsector/daughters/name 			module
+/gate/rsector/daughters/insert 			box
+/gate/module/placement/setTranslation 		0.0 0.0 0.0 mm
+/gate/module/geometry/setXLength 		39.0 mm
+/gate/module/geometry/setYLength 		26.0 mm
+/gate/module/geometry/setZLength 		22.9 mm
+/gate/module/setMaterial 			Air
+/gate/module/vis/setVisible 			0
+/gate/module/vis/setColor 			yellow
+
+#	BLOCK
+/gate/module/daughters/name 			block
+/gate/module/daughters/insert 			box
+/gate/block/placement/setTranslation 		0.0 0.0 0.0 mm	
+/gate/block/geometry/setXLength 		36.0 mm
+/gate/block/geometry/setYLength 		26.0 mm
+/gate/block/geometry/setZLength 		22.9 mm
+/gate/block/setMaterial 			Aluminium
+/gate/block/vis/setVisible 			0
+/gate/block/vis/setColor 			black
+
+#	C R Y S T A L
+/gate/block/daughters/name 			crystal
+/gate/block/daughters/insert 			box
+/gate/crystal/placement/setTranslation 		0.0 0.0 0.0 mm
+/gate/crystal/geometry/setXLength 		1.45 mm
+/gate/crystal/geometry/setYLength 		1.45 mm
+/gate/crystal/geometry/setZLength 		20.0 mm
+/gate/crystal/setMaterial 			LYSOPET
+/gate/crystal/vis/setVisible 			0
+/gate/crystal/vis/setColor 			yellow
+
+#	LYSO layer
+/gate/crystal/daughters/name 			LYSO
+/gate/crystal/daughters/insert 			box
+/gate/LYSO/placement/setTranslation 		0.0 0.0 0.0 mm
+/gate/LYSO/geometry/setXLength 			1.45 mm
+/gate/LYSO/geometry/setYLength 			1.45 mm
+/gate/LYSO/geometry/setZLength 			20.0 mm
+/gate/LYSO/setMaterial 				LYSOPET
+/gate/LYSO/vis/setColor 			blue
+
+
+#	R E P E A T    C R Y S T A L
+/gate/crystal/repeaters/insert 			cubicArray
+/gate/crystal/cubicArray/setRepeatNumberX 	24
+/gate/crystal/cubicArray/setRepeatNumberY 	16
+/gate/crystal/cubicArray/setRepeatNumberZ 	1
+/gate/crystal/cubicArray/setRepeatVector 	1.5 1.5 0.0 mm
+
+
+#	R E P E A T    M O D U L E
+/gate/module/repeaters/insert 			cubicArray
+/gate/module/cubicArray/setRepeatNumberX 	1
+/gate/module/cubicArray/setRepeatNumberY 	1
+/gate/module/cubicArray/setRepeatNumberZ 	5
+/gate/module/cubicArray/setRepeatVector 	0.0 0.0 22.6 mm
+
+#	R E P E A T R    R S E C T O R
+/gate/rsector/repeaters/insert 			ring
+/gate/rsector/ring/setRepeatNumber 		8
+
+
+#	A T T A C H    S Y S T E M 
+/gate/systems/cylindricalPET/rsector/attach 	rsector
+/gate/systems/cylindricalPET/module/attach 	module
+/gate/systems/cylindricalPET/submodule/attach 	block
+/gate/systems/cylindricalPET/crystal/attach 	crystal
+/gate/systems/cylindricalPET/layer0/attach 	LYSO
+
+
+#	A T T A C H    C R Y S T A L  SD
+
+/gate/LYSO/attachCrystalSD
+/gate/systems/cylindricalPET/describe
+
+
+
